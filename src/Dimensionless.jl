@@ -76,10 +76,15 @@ dimensional_matrix_spy(all_quantities::Vararg{Union{Unitful.AbstractQuantity, Un
 
 function check_basis(dim_mat)
     if size(dim_mat, 2) < size(dim_mat, 1)
-        error("Invalid basis! There are $(size(dim_mat, 1)) dimensions but only $(size(dim_mat, 2)) base vectors.")
+        error("Invalid basis! There are $(size(dim_mat, 1)) dimensions but only $(size(dim_mat, 2)) basis vectors.")
     end
-    if LinearAlgebra.rank(dim_mat) != size(dim_mat, 2)
-        error("Invalid basis! Basis vectors are not linear independent.")
+    mat_rank = LinearAlgebra.rank(dim_mat)
+    if mat_rank < size(dim_mat, 2)
+        if mat_rank == 1
+            error("Invalid basis! There are $(size(dim_mat, 2)) basis vectors that are all linear dependent.")
+        else
+            error("Invalid basis! There are $(size(dim_mat, 2)) basis vectors of which only $(mat_rank) are linear independent.")
+        end
     end
 end
 
