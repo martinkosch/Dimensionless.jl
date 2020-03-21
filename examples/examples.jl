@@ -16,7 +16,7 @@ dimensionless_string("v"=>u"A*m/s", applications_basis)
 
 problem_vars = ("P"=>dimension(u"W"), "n"=>dimension(u"s^-1"), "D"=>dimension(u"m"), "μ"=>dimension(u"Pa*s"), "ρ"=>dimension(u"kg/m^3"))
 num_dimensionless(problem_vars...)
-num_dims(problem_vars...)
+count_dims(problem_vars...)
 dimensionless_string("P"=>dimension(u"W"), dim_basis(problem_vars[[2,3,5]]...))
 dimensionless_string("P"=>dimension(u"A"), dim_basis("P"=>dimension(u"A")))
 dimensionless_string("n"=>dimension(u"1/s"), dim_basis(problem_vars[[3,4,5]]...))
