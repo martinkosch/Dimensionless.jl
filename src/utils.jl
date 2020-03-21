@@ -1,4 +1,4 @@
-function dimensionless_string(named_quantity::Pair{String, <:Union{Unitful.AbstractQuantity, Unitful.Unitlike}}, basis::Union{NamedValueDimBasis, NamedDimBasis}, seperator::String=" ")
+function dimensionless_string(named_quantity::Pair{String, <:Union{Unitful.AbstractQuantity, Unitful.Unitlike}}, basis::DimBasis{T,AbstractVector{String}} where T, seperator::String=" ")
     powers = basis.dim_mat \ dim_matrix(basis.basis_dims, named_quantity.second)
     positive_powers = findall(x -> x<0, powers)
     negative_powers = findall(x -> x>0, powers)
