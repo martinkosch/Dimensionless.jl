@@ -37,7 +37,38 @@ using Test
 end
 
 @testset "Change of basis" begin
-    change_basis = DimBasis(1u"mA", 2u"mol", 3u"Pa*s", 4u"h", 5u"kg")
-    dim_less = dimensionless(1u"A/m^2", change_basis)
-    @test dimensionful(dim_less, u"A/m^2", change_basis) == 1u"A/m^2"
+    # Test change of basis and broadcast
+    dimensionless_basis = DimBasis(1u"mA", 2u"K", 3u"Pa*s", 4u"h", 5u"kg")
+    vars = [0u"A/m^2", 1u"nm", 2u"K"]
+    dim_less = dimensionless.(vars, dimensionless_basis)
+    @test dimensionful.(dim_less, [u"A/m^2", u"nm", u"K"], dimensionless_basis) == vars
+
+    # Test counting of dimensions and dimensionless variables for named basis
+    quantities_named = ["a"=>100.0u"m", "b"=>100u"kg", "c"=>0u"s"]
+    units_named = [Pair(var.first, unit(var.second)) for var in quantities_named]
+    dims_named = [Pair(var.first, dimension(var.second)) for var in quantities_named]
+    @test number_of_dims(quantities_named...) == 3
+    @test number_of_dims(units_named...) == 3
+    @test number_of_dims(dims_named...) == 3
+    @test number_of_dimensionless(quantities_named...) == 0
+    @test number_of_dimensionless(units_named...) == 0
+    @test number_of_dimensionless(dims_named...) == 0
+
+    # Test counting of dimensions and dimensionless variables for unnamed basis
+    quantities_unnamed = [var.second for var in quantities_named]
+    units_unnamed = [var.second for var in units_named]
+    dims_unnamed = [var.second for var in dims_named]
+    @test number_of_dims(quantities_unnamed...) == 3
+    @test number_of_dims(units_unnamed...) == 3
+    @test number_of_dims(dims_unnamed...) == 3
+    @test number_of_dimensionless(quantities_unnamed...) == 0
+    @test number_of_dimensionless(units_unnamed...) == 0
+    @test number_of_dimensionless(dims_unnamed...) == 0
+
+        # change_basis(quantity/unit, old_b, new_b) for named and unnamed quantity bases
+    # change_basis_from =
+    # change_basis_to =
+    # vars =
+    # for broadcast_fcn in (identity, unit, dimension)
+    # end
 end

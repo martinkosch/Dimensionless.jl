@@ -14,6 +14,8 @@ struct DimBasis{T,N}
     end
 end
 
+Base.Broadcast.broadcastable(basis::DimBasis) = Ref(basis)
+
 DimBasis(basis_vectors::Vararg{Union{Unitful.AbstractQuantity,Unitful.Unitlike}}) =
 DimBasis([basis_vectors...])
 
@@ -22,9 +24,6 @@ function DimBasis(named_basis_vectors::Vararg{Pair{String,<:Union{Unitful.Abstra
     basis_vector_names = [named_basis_vector.first for named_basis_vector in named_basis_vectors]
     return DimBasis(basis_vectors, basis_vector_names)
 end
-
-DimBasis(named_basis_vectors::Dict{String,<:Union{Unitful.Unitlike,Unitful.AbstractQuantity}}) =
-DimBasis(named_basis_vectors...)
 
 function unique_dims(all_dims::Vararg{Unitful.Dimensions})
     basis_dims = Vector{Type{<:Unitful.Dimension}}()
