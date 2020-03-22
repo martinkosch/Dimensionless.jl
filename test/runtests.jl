@@ -86,7 +86,7 @@ end
     @test dimensionless_string(var, DimBasis(quantities_named...)) == res
     @test dimensionless_string(var, DimBasis(units_named...)) == res
     @test dimensionless_string(var, DimBasis(dims_named...)) == res
-    
+
     # # Test dimensionless string for unnamed basis
     # quantities_unnamed = [var.second for var in quantities_named]
     # units_unnamed = [var.second for var in units_named]

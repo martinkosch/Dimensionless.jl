@@ -1,3 +1,6 @@
+QuantityOrUnits = Union{Unitful.AbstractQuantity,Unitful.Units}
+QuantityOrUnitlike = Union{Unitful.AbstractQuantity, Unitful.Unitlike}
+
 struct DimBasis{T,N}
     basis_vectors::T
     basis_vector_names::N
@@ -5,7 +8,7 @@ struct DimBasis{T,N}
     dim_mat
 
     function DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where
-        T<:AbstractVector{<:Union{Unitful.AbstractQuantity,Unitful.Unitlike}} where
+        T<:AbstractVector{<:QuantityOrUnitlike} where
         N<:Union{Nothing,AbstractVector{<:AbstractString}}
         basis_dims = unique_dims(basis_vectors...)
         dim_mat = dim_matrix(basis_dims, basis_vectors...)
@@ -16,10 +19,14 @@ end
 
 Base.Broadcast.broadcastable(basis::DimBasis) = Ref(basis)
 
-DimBasis(basis_vectors::Vararg{Union{Unitful.AbstractQuantity,Unitful.Unitlike}}) =
+QuantityDimBasis = DimBasis{<:AbstractVector{<:Unitful.AbstractQuantity}}
+
+NamedDimBase = DimBasis{T,<:AbstractVector{<:AbstractString}} where T
+
+DimBasis(basis_vectors::Vararg{<:QuantityOrUnitlike}) =
 DimBasis([basis_vectors...])
 
-function DimBasis(named_basis_vectors::Vararg{Pair{<:AbstractString,<:Union{Unitful.AbstractQuantity, Unitful.Unitlike}}})
+function DimBasis(named_basis_vectors::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}})
     basis_vectors = [named_basis_vector.second for named_basis_vector in named_basis_vectors]
     basis_vector_names = [named_basis_vector.first for named_basis_vector in named_basis_vectors]
     return DimBasis(basis_vectors, basis_vector_names)
@@ -33,7 +40,7 @@ function unique_dims(all_dims::Vararg{Unitful.Dimensions})
     return basis_dims
 end
 
-unique_dims(all_quantities::Vararg{Union{Unitful.AbstractQuantity, Unitful.Units}}) =
+unique_dims(all_quantities::Vararg{QuantityOrUnits}) =
     unique_dims(dimension.(all_quantities)...)
 
 function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_dims::Vararg{Unitful.Dimensions})
@@ -50,7 +57,7 @@ function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_dims::Vara
     return dim_mat
 end
 
-dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_quantities::Vararg{Union{Unitful.AbstractQuantity, Unitful.Units}}) =
+dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_quantities::Vararg{<:QuantityOrUnits}) =
     dim_matrix(basis_dims, dimension.(all_quantities)...)
 
 function check_basis(dim_mat)
