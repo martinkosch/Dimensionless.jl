@@ -6,7 +6,7 @@ struct DimBasis{T,N}
 
     function DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where
         T<:AbstractVector{<:Union{Unitful.AbstractQuantity,Unitful.Unitlike}} where
-        N<:Union{Nothing,AbstractVector{String}}
+        N<:Union{Nothing,AbstractVector{<:AbstractString}}
         basis_dims = unique_dims(basis_vectors...)
         dim_mat = dim_matrix(basis_dims, basis_vectors...)
         check_basis(dim_mat)
@@ -19,7 +19,7 @@ Base.Broadcast.broadcastable(basis::DimBasis) = Ref(basis)
 DimBasis(basis_vectors::Vararg{Union{Unitful.AbstractQuantity,Unitful.Unitlike}}) =
 DimBasis([basis_vectors...])
 
-function DimBasis(named_basis_vectors::Vararg{Pair{String,<:Union{Unitful.AbstractQuantity, Unitful.Unitlike}}})
+function DimBasis(named_basis_vectors::Vararg{Pair{<:AbstractString,<:Union{Unitful.AbstractQuantity, Unitful.Unitlike}}})
     basis_vectors = [named_basis_vector.second for named_basis_vector in named_basis_vectors]
     basis_vector_names = [named_basis_vector.first for named_basis_vector in named_basis_vectors]
     return DimBasis(basis_vectors, basis_vector_names)

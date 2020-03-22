@@ -2,7 +2,7 @@ function number_of_dims(all_vars::Vararg{Unitful.Dimensions})
     return length(unique_dims(all_vars...))
 end
 
-number_of_dims(all_vars::Vararg{Pair{String,<:Union{Unitful.Dimensions, Unitful.AbstractQuantity, Unitful.Units}}}) =
+number_of_dims(all_vars::Vararg{Pair{<:AbstractString,<:Union{Unitful.Dimensions, Unitful.AbstractQuantity, Unitful.Units}}}) =
 number_of_dims([var.second for var in all_vars]...)
 
 number_of_dims(all_vars::Vararg{Union{Unitful.AbstractQuantity, Unitful.Units}}) =
@@ -12,7 +12,7 @@ function number_of_dimensionless(all_vars::Vararg{<:Union{Unitful.AbstractQuanti
     return length(all_vars) - number_of_dims(all_vars...)
 end
 
-number_of_dimensionless(all_vars::Vararg{Pair{String,<:Union{Unitful.Dimensions, Unitful.AbstractQuantity, Unitful.Units}}}) =
+number_of_dimensionless(all_vars::Vararg{Pair{<:AbstractString,<:Union{Unitful.Dimensions, Unitful.AbstractQuantity, Unitful.Units}}}) =
 number_of_dimensionless([var.second for var in all_vars]...)
 
 function dimensionless(quantity::Unitful.AbstractQuantity, basis::T where

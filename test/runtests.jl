@@ -66,10 +66,32 @@ end
     @test number_of_dimensionless(units_unnamed...) == 0
     @test number_of_dimensionless(dims_unnamed...) == 0
 
-        # change_basis(quantity/unit, old_b, new_b) for named and unnamed quantity bases
+    # change_basis(quantity/unit, old_b, new_b) for named and unnamed quantity bases
+
     # change_basis_from =
     # change_basis_to =
     # vars =
     # for broadcast_fcn in (identity, unit, dimension)
     # end
+end
+
+@testset "Utils" begin
+    var = "L"=>0.2u"m"
+    quantities_named = ["ρ"=>1400.0u"kg/m^3", "v"=>0.5u"m/s", "η"=>(10^4)u"Pa*s"]
+    res = "L ρ v / η"
+
+    # Test dimensionless string for named basis
+    units_named = [Pair(var.first, unit(var.second)) for var in quantities_named]
+    dims_named = [Pair(var.first, dimension(var.second)) for var in quantities_named]
+    @test dimensionless_string(var, DimBasis(quantities_named...)) == res
+    @test dimensionless_string(var, DimBasis(units_named...)) == res
+    @test dimensionless_string(var, DimBasis(dims_named...)) == res
+    
+    # # Test dimensionless string for unnamed basis
+    # quantities_unnamed = [var.second for var in quantities_named]
+    # units_unnamed = [var.second for var in units_named]
+    # dims_unnamed = [var.second for var in dims_named]
+    # @test dimensionless_string(var, DimBasis(quantities_unnamed...)) == res
+    # @test dimensionless_string(var, DimBasis(units_unnamed...)) == res
+    # @test dimensionless_string(var, DimBasis(dims_unnamed...)) == res
 end
