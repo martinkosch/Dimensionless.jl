@@ -4,7 +4,7 @@ using Unitful, LinearAlgebra
 
 export DimBasis, dim_matrix
 export number_of_dims, number_of_dimensionless, dimensionless, dimensionful, change_basis
-export dimensionless_string
+export dimensionless_string, print_dimensionless
 
 include("dim_basis.jl")
 include("dim_basis_ops.jl")

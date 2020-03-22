@@ -18,3 +18,6 @@ function dimensionless_string(named_quantity::NamedBasisVectors, basis::NamedDim
 
     return String(take!(out))
 end
+
+print_dimensionless(named_quantity::NamedBasisVectors, basis::NamedDimBase, seperator::String=" ") =
+print(dimensionless_string(named_quantity, basis, seperator))
