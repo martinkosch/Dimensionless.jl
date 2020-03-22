@@ -17,8 +17,8 @@ number_of_dimensionless([var.second for var in all_vars]...)
 
 function dimensionless(quantity::Unitful.AbstractQuantity, basis::QuantityDimBasis)
     dim_mat = dim_matrix(basis.basis_dims, quantity)
-    basis_multipliers = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_mat))
-    return ustrip(uconvert(Unitful.NoUnits, quantity / basis_multipliers))
+    basis_facs = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_mat))
+    return ustrip(uconvert(Unitful.NoUnits, quantity / basis_facs))
 end
 
 function dimensionful(value::Number, unit::Unitful.Units, basis::QuantityDimBasis)
@@ -26,17 +26,17 @@ function dimensionful(value::Number, unit::Unitful.Units, basis::QuantityDimBasi
     return uconvert(unit, value * prod(basis.basis_vectors .^ (basis.dim_mat \ dim_vec)))
 end
 
-function old_to_new_multiplier(dims::Unitful.Dimensions, old_basis::QuantityDimBasis, new_basis::QuantityDimBasis)
-    old_dim_mat = dim_matrix(old_basis.basis_dims, dims)
+function current_to_new_fac(dims::Unitful.Dimensions, basis::QuantityDimBasis, new_basis::QuantityDimBasis)
+    dim_mat = dim_matrix(basis.basis_dims, dims)
     new_dim_mat = dim_matrix(new_basis.basis_dims, dims)
-    new_multipler = prod(new_basis.basis_vectors .^ (new_basis.dim_mat \ new_dim_mat))
-    old_multipler = prod(old_basis.basis_vectors .^ (old_basis.dim_mat \ old_dim_mat))
-    multiplier = new_multipler / old_multipler
-    return ustrip(uconvert(Unitful.NoUnits, multiplier))
+    basis_fac = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_mat))
+    new_basis_multipler = prod(new_basis.basis_vectors .^ (new_basis.dim_mat \ new_dim_mat))
+    current_to_new_fac = new_basis_multipler / basis_fac
+    return ustrip(uconvert(Unitful.NoUnits, current_to_new_fac))
 end
 
-change_basis(quantity::Unitful.AbstractQuantity, old_basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
-quantity * old_to_new_multiplier(dimension(quantity), old_basis, new_basis)
+change_basis(quantity::Unitful.AbstractQuantity, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
+quantity * current_to_new_fac(dimension(quantity), basis, new_basis)
 
-change_basis(unit::Unitful.Units, old_basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
-old_to_new_multiplier(dimension(unit), old_basis, new_basis)
+change_basis(unit::Unitful.Units, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
+current_to_new_fac(dimension(unit), basis, new_basis)
