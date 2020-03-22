@@ -76,7 +76,7 @@ julia> P_application_fac = v_model * change_basis(u"W", model_basis, application
 17.156 m s^-1
 ```
 
-In order achieve similarity between the model and the application, the model velocity has to be 109.6 m/s, which is
+Similarity between the model and the application is achieved with a model velocity of 109.6 m/s, which is
 21.9 times higher than the application velocity. The measured drag forces acting on the model under these circumstances need to be multiplied by 3.4 to determine the drag forces acting on the full scale submarine. The necessary propulsion power equates to P<sub>application</sub> = F<sub>model</sub> · v<sub>model</sub> · (P<sub>application</sub>/P<sub>model</sub>) = F<sub>model</sub> · 17.2 m/s. 
 
 As a last point, it is often helpful to be able to remove and restore the dimensions of variables in a given dimensional basis:
