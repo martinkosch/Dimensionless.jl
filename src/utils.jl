@@ -1,19 +1,9 @@
 NamedDimVector = Pair{<:AbstractString,<:QuantityOrUnitlike}
 
-# function dimensionless_string(named_quantity::NamedQuantity, basis::NamedDimBase)
-#
-#     out = IOBuffer()
-#     write(out, named_quantity.first)
-#     (!isempty(positive_powers)) && write(out, " ")
-#     write(out, join(vars[positive_powers], seperator))
-#     write(out, " / ")
-#     (length(negative_powers) > 1) && write(out, "(")
-#     write(out, join(vars[negative_powers], seperator))
-#     (length(negative_powers) > 1) && write(out, ")")
-#
-#     return String(take!(out))
-# end
-
+"""
+    print_dimensionless([io], named_dim_vector, basis)
+Print the dimensionless number that can be constructed using `named_dim_vector` in the specified dimensional `basis`.
+"""
 function print_dimensionless(io::IO, named_dim_vector::NamedDimVector, basis::NamedDimBase)
     powers = -1 * (basis.dim_mat \ dim_matrix(basis.basis_dims, named_dim_vector.second))[:]
     perm = exps_perm(powers)
@@ -33,17 +23,21 @@ end
 print_dimensionless(named_dim_vector::NamedDimVector, basis::NamedDimBase) =
 print_dimensionless(stdout, named_dim_vector, basis)
 
-function showrep(io::IO, identifier::String, exp::Rational)
+"""
+    showrep(io, identifier, exponent)
+Print the `identifier` followed by the corresponding `exponent` to the specified stream `io`.
+"""
+function showrep(io::IO, identifier::String, exponent::Rational)
         print(io, identifier)
-        if exp != 1
-            print(io, Unitful.superscript(exp))
+        if exponent != 1
+            print(io, Unitful.superscript(exponent))
         end
     nothing
 end
 
 """
     exps_perm(powers)
-Calculate the permutation of exponents to show large positive values first followed by large negative values.
+Return the permutation of exponents so that large positive values are showed first followed by large negative values.
 """
 function exps_perm(powers)
     perm = sortperm(powers; rev=true)
