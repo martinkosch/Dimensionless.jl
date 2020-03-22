@@ -48,9 +48,9 @@ end
     quantities_named = ["a"=>100.0u"m", "b"=>100u"kg", "c"=>0u"s"]
     units_named = [Pair(var.first, unit(var.second)) for var in quantities_named]
     dims_named = [Pair(var.first, dimension(var.second)) for var in quantities_named]
-    @test number_of_dims(quantities_named...) == 3
-    @test number_of_dims(units_named...) == 3
-    @test number_of_dims(dims_named...) == 3
+    @test number_of_dimensions(quantities_named...) == 3
+    @test number_of_dimensions(units_named...) == 3
+    @test number_of_dimensions(dims_named...) == 3
     @test number_of_dimensionless(quantities_named...) == 0
     @test number_of_dimensionless(units_named...) == 0
     @test number_of_dimensionless(dims_named...) == 0
@@ -59,9 +59,9 @@ end
     quantities_unnamed = [var.second for var in quantities_named]
     units_unnamed = [var.second for var in units_named]
     dims_unnamed = [var.second for var in dims_named]
-    @test number_of_dims(quantities_unnamed...) == 3
-    @test number_of_dims(units_unnamed...) == 3
-    @test number_of_dims(dims_unnamed...) == 3
+    @test number_of_dimensions(quantities_unnamed...) == 3
+    @test number_of_dimensions(units_unnamed...) == 3
+    @test number_of_dimensions(dims_unnamed...) == 3
     @test number_of_dimensionless(quantities_unnamed...) == 0
     @test number_of_dimensionless(units_unnamed...) == 0
     @test number_of_dimensionless(dims_unnamed...) == 0

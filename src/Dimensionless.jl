@@ -3,7 +3,7 @@ module Dimensionless
 using Unitful, LinearAlgebra
 
 export DimBasis, dim_matrix
-export number_of_dims, number_of_dimensionless, dimensionless, dimensionful, change_basis
+export number_of_dimensions, number_of_dimensionless, dimensionless, dimensionful, change_basis
 export dimensionless_string, print_dimensionless
 
 include("dim_basis.jl")

@@ -1,23 +1,23 @@
 """
-     number_of_dims(all_vars)
+     number_of_dimensions(all_vars)
 Return the number of unique dimensions for the given variables `all_vars.
 """
-function number_of_dims(all_vars::Vararg{Unitful.Dimensions})
+function number_of_dimensions(all_vars::Vararg{Unitful.Dimensions})
     return length(unique_dims(all_vars...))
 end
 
-number_of_dims(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
-number_of_dims([var.second for var in all_vars]...)
+number_of_dimensions(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
+number_of_dimensions([var.second for var in all_vars]...)
 
-number_of_dims(all_vars::Vararg{<:QuantityOrUnits}) =
-number_of_dims(dimension.(all_vars)...)
+number_of_dimensions(all_vars::Vararg{<:QuantityOrUnits}) =
+number_of_dimensions(dimension.(all_vars)...)
 
 """
      number_of_dimensionless(all_vars)
 Return the number of dimensionless numbers that can be constructed for a problem characterized by the variables `all_vars`.
 """
 function number_of_dimensionless(all_vars::Vararg{<:QuantityOrUnitlike})
-    return length(all_vars) - number_of_dims(all_vars...)
+    return length(all_vars) - number_of_dimensions(all_vars...)
 end
 
 number_of_dimensionless(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
