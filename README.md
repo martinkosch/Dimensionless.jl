@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/martinkosch/Dimensionless.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/martinkosch/Dimensionless.jl)
 
 # Dimensionless.jl
-Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and similitude problems. 
+Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis. 
 
 ## Example
 The following example is taken from the [Similitude Wikipedia article](https://en.wikipedia.org/wiki/Similitude_(model)): 
