@@ -20,15 +20,3 @@ count_dims(problem_vars...)
 dimensionless_string("P"=>dimension(u"W"), dim_basis(problem_vars[[2,3,5]]...))
 dimensionless_string("P"=>dimension(u"A"), dim_basis("P"=>dimension(u"A")))
 dimensionless_string("n"=>dimension(u"1/s"), dim_basis(problem_vars[[3,4,5]]...))
-
-function empiric_barometric(h)
-    a0 = 7.001985e-02
-    a1 = -4.336216e-03
-    a2 = -5.009831e-03
-    a3 = 1.621827e-04
-    a4 = -2.471283e-06
-    a5 = 1.904383e-08
-    a6 = -7.189421e-11
-    a7 = 1.060067e-13
-    return 10^(((((((a7*h/1000 + a6)*h/1000 + a5)*h/1000 + a4)*h/1000 + a3)*h/1000 + a2)*h/1000 + a1)*h/1000 + a0)
-end

@@ -12,7 +12,7 @@ struct DimBasis{T,N}
     basis_dims
     dim_mat
 
-    function _DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where
+    function DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where
         T<:AbstractVector{<:QuantityOrUnitlike} where
         N<:Union{Nothing,AbstractVector{<:AbstractString}}
         basis_dims = unique_dims(basis_vectors...)
@@ -23,12 +23,12 @@ struct DimBasis{T,N}
 end
 
 DimBasis(basis_vectors::Vararg{<:QuantityOrUnitlike}) =
-_DimBasis([basis_vectors...])
+DimBasis([basis_vectors...])
 
 function DimBasis(basis_vectors::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}})
-    basis_vectors = [basis_vector.second for basis_vector in basis_vectors]
-    basis_vector_names = [basis_vector.first for basis_vector in basis_vectors]
-    return _DimBasis(basis_vectors, basis_vector_names)
+    new_basis_vectors = [basis_vector.second for basis_vector in basis_vectors]
+    new_basis_vector_names = [basis_vector.first for basis_vector in basis_vectors]
+    return DimBasis(new_basis_vectors, new_basis_vector_names)
 end
 
 # Do not broadcast DimBasis

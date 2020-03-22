@@ -2,12 +2,12 @@ using Dimensionless, Unitful
 using Test
 
 @testset "DimBasis construction" begin
-    # Check invalid basis exceptions
+    # Check invalid basis construction exceptions
     @test_throws ErrorException DimBasis(9.81u"m/s^2", 1u"mm", 1u"s")
     @test_throws ErrorException DimBasis(9.81u"m", 9.81u"m")
     @test_throws ErrorException DimBasis(9.81u"m/s^2")
 
-    # Check dim_basis exception in case of unvalid dimension
+    # Check exception in dim_matrix() in case of unvalid dimension
     basis = DimBasis(9.81u"m/s^2", 6371u"km", 1420788u"kg", 1u"mol/g")
     @test_throws ErrorException dim_matrix(basis.basis_dims, 1u"A")
 
