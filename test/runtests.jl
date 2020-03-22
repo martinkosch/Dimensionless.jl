@@ -4,6 +4,7 @@ using Test
 @testset "DimBasis construction" begin
     # Check invalid basis exceptions
     @test_throws ErrorException DimBasis(9.81u"m/s^2", 1u"mm", 1u"s")
+    @test_throws ErrorException DimBasis(9.81u"m", 9.81u"m")
     @test_throws ErrorException DimBasis(9.81u"m/s^2")
 
     # Check dim_basis exception in case of unvalid dimension

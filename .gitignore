@@ -1,3 +1,11 @@
 .DS_Store
+*.jl.cov
+*.jl.
+*.cov
+*.jl.mem
+*.info
+deps/
+docs/build/
+docs/site/
 /Manifest.toml
 /dev/
