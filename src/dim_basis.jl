@@ -3,8 +3,10 @@ QuantityOrUnits = Union{Unitful.AbstractQuantity,Unitful.Units}
 QuantityOrUnitlike = Union{Unitful.AbstractQuantity, Unitful.Unitlike}
 
 """
-     DimBasis(basis_vectors) -> DimBasis
-Create a dimensional basis for a number of `basis_vectors` (quantities, units or dimensions) that can be named or unnamed.
+    DimBasis(basis_vectors...) -> DimBasis
+
+Create a dimensional basis for a number of `basis_vectors` (quantities, units or dimensions).
+A string identifier can optionally be added to each basis vector. 
 """
 struct DimBasis{T,N}
     basis_vectors::T
@@ -40,7 +42,8 @@ QuantityDimBasis = DimBasis{<:AbstractVector{<:Unitful.AbstractQuantity}}
 NamedDimBase = DimBasis{T,<:AbstractVector{<:AbstractString}} where T
 
 """
-     unique_dims(all_values)
+    unique_dims(all_values...)
+
 Return a vector of unique dimensions for `all_values`, a set of quantities, units or dimensions.
 """
 function unique_dims(all_values::Vararg{Unitful.Dimensions})
@@ -55,7 +58,8 @@ unique_dims(all_values::Vararg{QuantityOrUnits}) =
     unique_dims(dimension.(all_values)...)
 
 """
-     dim_matrix(basis_dims, all_values)
+    dim_matrix(basis_dims, all_values...)
+
 Return the dimensional matrix for a set of basis dimensions `basis_dims` and `all_values`, a set of quantities, units or dimensions.
 """
 function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{Unitful.Dimensions})
@@ -73,10 +77,11 @@ function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Va
 end
 
 dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{<:QuantityOrUnits}) =
-    dim_matrix(basis_dims, dimension.(all_values)...)
+dim_matrix(basis_dims, dimension.(all_values)...)
 
 """
-     check_basis(dim_mat)
+    check_basis(dim_mat)
+
 Use a dimensional matrix to check if a collection of dimensional vectors is a valid basis.
 Throw errors if there are to few basis vectors or if the matrix does not have full rank.
 """

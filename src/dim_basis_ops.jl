@@ -1,6 +1,7 @@
 """
-     number_of_dimensions(all_vars)
-Return the number of unique dimensions for the given variables `all_vars.
+    number_of_dimensions(all_vars...)
+
+Return the number of unique dimensions for the given variables `all_vars`.
 """
 function number_of_dimensions(all_vars::Vararg{Unitful.Dimensions})
     return length(unique_dims(all_vars...))
@@ -13,7 +14,8 @@ number_of_dimensions(all_vars::Vararg{<:QuantityOrUnits}) =
 number_of_dimensions(dimension.(all_vars)...)
 
 """
-     number_of_dimensionless(all_vars)
+    number_of_dimensionless(all_vars...)
+
 Return the number of dimensionless numbers that can be constructed for a problem characterized by the variables `all_vars`.
 """
 function number_of_dimensionless(all_vars::Vararg{<:QuantityOrUnitlike})
@@ -24,7 +26,8 @@ number_of_dimensionless(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitl
 number_of_dimensionless([var.second for var in all_vars]...)
 
 """
-     dimensionless(quantity, basis)
+    dimensionless(quantity, basis)
+
 Make a `quantity` dimensionless using a dimensional `basis`.
 """
 function dimensionless(quantity::Unitful.AbstractQuantity, basis::QuantityDimBasis)
@@ -34,7 +37,8 @@ function dimensionless(quantity::Unitful.AbstractQuantity, basis::QuantityDimBas
 end
 
 """
-     dimensionful(value, unit, basis)
+    dimensionful(value, unit, basis)
+
 Restore the `unit`s of a dimensionless `value` using a dimensional `basis`.
 """
 function dimensionful(value::Number, unit::Unitful.Units, basis::QuantityDimBasis)
@@ -43,7 +47,8 @@ function dimensionful(value::Number, unit::Unitful.Units, basis::QuantityDimBasi
 end
 
 """
-     current_to_new_fac(dims, basis, new_basis)
+    current_to_new_fac(dims, basis, new_basis)
+
 Return the factor that is needed to transform specified dimensions `dims` from a current `basis` to a `new_basis`.
 """
 function current_to_new_fac(dims::Unitful.Dimensions, basis::QuantityDimBasis, new_basis::QuantityDimBasis)
@@ -56,7 +61,8 @@ function current_to_new_fac(dims::Unitful.Dimensions, basis::QuantityDimBasis, n
 end
 
 """
-     change_basis(var, basis, new_basis)
+    change_basis(var, basis, new_basis)
+
 Transform the specified quantity or unit `var` from a current `basis` to a `new_basis`.
 """
 change_basis(var::Unitful.AbstractQuantity, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =

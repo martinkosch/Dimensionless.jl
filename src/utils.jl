@@ -1,7 +1,8 @@
 NamedDimVector = Pair{<:AbstractString,<:QuantityOrUnitlike}
 
 """
-    print_dimensionless([io], named_dim_vector, basis)
+    print_dimensionless([io, ]named_dim_vector, basis)
+
 Print the dimensionless number that can be constructed using `named_dim_vector` in the specified dimensional `basis`.
 """
 function print_dimensionless(io::IO, named_dim_vector::NamedDimVector, basis::NamedDimBase)
@@ -25,6 +26,7 @@ print_dimensionless(stdout, named_dim_vector, basis)
 
 """
     showrep(io, identifier, exponent)
+
 Print the `identifier` followed by the corresponding `exponent` to the specified stream `io`.
 """
 function showrep(io::IO, identifier::String, exponent::Rational)
