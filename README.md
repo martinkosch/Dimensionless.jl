@@ -8,7 +8,7 @@ Dimensionless is a package built on top of [Unitful.jl](https://github.com/Paint
 ## Installation
 Install the package using Julia's package manager:
 ```julia
-julia>]add Dimensionless
+pkg> add Dimensionless
 ```
 
 Currently, Unitful's functionality is not exported from Dimensionless. To use Dimensionless, Unitful should be imported as well:
