@@ -6,12 +6,12 @@
 Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems.
 
 ## Installation
-Clone the package repository from GitHub using Julia's package manager:
+Install the package using Julia's package manager:
 ```julia
-pkg> add https://github.com/martinkosch/Dimensionless.jl
+julia>]add Dimensionless
 ```
 
-Currently, Unitful's functionality is not exported from Dimensionless. To use Dimensionless, Unitful therefore needs to be imported as well:
+Currently, Unitful's functionality is not exported from Dimensionless. To use Dimensionless, Unitful should be imported as well:
 ```julia
 julia> using Dimensionless, Unitful
 ```
