@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/martinkosch/Dimensionless.jl.svg?branch=master)](https://travis-ci.com/martinkosch/Dimensionless.jl)
 [![codecov](https://codecov.io/gh/martinkosch/Dimensionless.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/martinkosch/Dimensionless.jl)
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://martinkosch.github.io/Dimensionless.jl/stable)
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://martinkosch.github.io/Dimensionless.jl/dev)
 
 # Dimensionless.jl
 Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems.
