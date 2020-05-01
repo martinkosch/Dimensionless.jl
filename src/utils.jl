@@ -33,7 +33,7 @@ function showrep(io::IO, identifier::String, exp::Rational)
         print(io, identifier)
         if exp != 1
             exp_str = exp.den == 1 ? "^" * string(exp.num) : "^" * replace(string(exp), "//" => "/")
-            print(io, )
+            print(io, exp_str)
         end
     nothing
 end
