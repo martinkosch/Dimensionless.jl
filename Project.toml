@@ -4,9 +4,7 @@ authors = ["Martin Kosch"]
 version = "0.1.0"
 
 [deps]
-FiniteStateMachine = "96d663bc-7ccb-4a8f-a6f5-76bc8e71f284"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
-StateMachine = "33480a36-0b8d-4bc8-8e65-c581e569e559"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 
 [compat]
