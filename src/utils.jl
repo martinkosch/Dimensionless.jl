@@ -29,10 +29,11 @@ print_dimensionless(stdout, named_dim_vector, basis)
 
 Print the `identifier` followed by the corresponding `exponent` to the specified stream `io`.
 """
-function showrep(io::IO, identifier::String, exponent::Rational)
+function showrep(io::IO, identifier::String, exp::Rational)
         print(io, identifier)
-        if exponent != 1
-            print(io, Unitful.superscript(exponent))
+        if exp != 1
+            exp_str = exp.den == 1 ? "^" * string(exp.num) : "^" * replace(string(exp), "//" => "/")
+            print(io, )
         end
     nothing
 end
