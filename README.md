@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/martinkosch/Dimensionless.jl.svg?branch=master)](https://travis-ci.com/martinkosch/Dimensionless.jl)
+[![CI](https://github.com/martinkosch/Dimensionless.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/martinkosch/Dimensionless.jl/actions/workflows/CI.yml)
 [![codecov](https://codecov.io/github/martinkosch/Dimensionless.jl/graph/badge.svg?token=G1SAGH9JWN)](https://codecov.io/github/martinkosch/Dimensionless.jl)
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://martinkosch.github.io/Dimensionless.jl/dev)
 
