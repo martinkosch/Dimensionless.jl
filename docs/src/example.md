@@ -26,26 +26,26 @@ julia> number_of_dimensionless(u"m", u"m/s", u"kg/m^3", u"Pa*s", u"N")
 2
 ```
 
-In order to find the required power of the submarine, we need to find a dimensional basis for the problem. In Dimensionless.jl, this is done by creating an instance of type `DimBasis`. As calculated before, there need to be three linear independent basis vectors to span the dimensional space:
+In order to find the required power of the submarine, we need to find a dimensional basis for the problem. In Dimensionless.jl, this is done by creating an instance of type `DimBasis`. As calculated before, there need to be three linear independent basis vectors to span the dimensional space. While creating such a basis using the `DimBasis` function, it is helpful to name the used variables to allow pretty printing of the results later on:
 ```julia
-julia> basis = DimBasis(u"m", u"m/s", u"kg/m^3", u"Pa*s") # Invalid basis
+julia> basis = DimBasis("L"=>u"m", "V"=>u"m/s", "ρ"=>u"kg/m^3", "μ"=>u"Pa*s") # Invalid basis
 ERROR: Invalid basis! There are 4 basis vectors of which only 3 are linear independent.
 
-julia> basis = DimBasis(u"m/s", u"kg/m^3", u"Pa*s") # Valid basis
+julia> basis = DimBasis("L"=>u"m", "ρ"=>u"kg/m^3", "μ"=>u"Pa*s") # Valid basis
 DimBasis{...}
 ```
 
 A valid basis! Together with the two remaining variables ``v`` and ``F``, the two dimensionless numbers can be determined:
 ```julia
-julia> print_dimensionless("v"=>u"m/s", basis)
-v L ρ μ^-1
+julia> print_dimensionless("V"=>u"m/s", basis)
+V L ρ μ^-1
 
 julia> print_dimensionless("F"=>u"N", basis)
 F ρ μ^-2
 ```
-The first found number is the Reynolds number ``\mathit{Re}`` and the second found number is the product of the drag coefficient ``c_d`` and ``\mathit{Re}^2``. All equations describing the problem can be scaled using these numbers.
+The first found number is the Reynolds number ``\mathit{Re}`` and the second number can be identified as the product of the drag coefficient ``c_d`` and ``\mathit{Re}^2``. All equations describing the problem can now be scaled using these numbers.
 
-It is possible to add names and quantities to a `DimBasis`. Let's construct two bases that describe the submarine model and the real submarine:
+Let's construct two bases that describe the submarine model and the real submarine, respectively:
 ```julia
 julia> applications_basis = DimBasis("L"=>1u"m", "ρ"=>1028u"kg/m^3", "μ"=>1.88e-3u"Pa*s")
 DimBasis{...}
