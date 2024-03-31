@@ -1,5 +1,5 @@
 # Helper Unions
-QuantityOrUnits = Union{Unitful.AbstractQuantity,Unitful.Units}
+QuantityOrUnits = Union{Unitful.AbstractQuantity, Unitful.Units}
 QuantityOrUnitlike = Union{Unitful.AbstractQuantity, Unitful.Unitlike}
 
 """
@@ -24,12 +24,13 @@ struct DimBasis{T,N}
     end
 end
 
-DimBasis(basis_vectors::Vararg{<:QuantityOrUnitlike}) =
+DimBasis(basis_vectors::Vararg{QuantityOrUnitlike}) =
 DimBasis([basis_vectors...])
 
 function DimBasis(basis_vectors::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}})
-    new_basis_vectors = [basis_vector.second for basis_vector in basis_vectors]
-    new_basis_vector_names = [basis_vector.first for basis_vector in basis_vectors]
+    to_quantity = any([isa(bv.second, Unitful.AbstractQuantity) for bv in basis_vectors])
+    new_basis_vectors = [to_quantity ? 1 * bv.second : bv.second for bv in basis_vectors]
+    new_basis_vector_names = [bv.first for bv in basis_vectors]
     return DimBasis(new_basis_vectors, new_basis_vector_names)
 end
 
@@ -67,7 +68,7 @@ function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Va
     for (dimension_ind,dims) in enumerate(all_values)
         for dimension in typeof(dims).parameters[1]
             basis_dim_ind = findfirst(x -> isa(dimension, x), basis_dims)
-            if basis_dim_ind == nothing
+            if isnothing(basis_dim_ind) 
                 error("$(typeof(dimension)) is no basis dimension!")
             end
             dim_mat[basis_dim_ind,dimension_ind] = dimension.power
@@ -76,7 +77,7 @@ function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Va
     return dim_mat
 end
 
-dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{<:QuantityOrUnits}) =
+dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{QuantityOrUnits}) =
 dim_matrix(basis_dims, dimension.(all_values)...)
 
 """
