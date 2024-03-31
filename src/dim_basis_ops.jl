@@ -10,7 +10,7 @@ end
 number_of_dimensions(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
 number_of_dimensions([var.second for var in all_vars]...)
 
-number_of_dimensions(all_vars::Vararg{<:QuantityOrUnits}) =
+number_of_dimensions(all_vars::Vararg{QuantityOrUnits}) =
 number_of_dimensions(dimension.(all_vars)...)
 
 """
@@ -18,7 +18,7 @@ number_of_dimensions(dimension.(all_vars)...)
 
 Return the number of dimensionless numbers that can be constructed for a problem characterized by the variables `all_vars`.
 """
-function number_of_dimensionless(all_vars::Vararg{<:QuantityOrUnitlike})
+function number_of_dimensionless(all_vars::Vararg{QuantityOrUnitlike})
     return length(all_vars) - number_of_dimensions(all_vars...)
 end
 
