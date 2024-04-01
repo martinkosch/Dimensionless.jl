@@ -23,7 +23,7 @@ This relationship applies regardless of the specific problem parameters and the 
 In the following, it will be explained how such a transformation can be achieved and how it can be used to transfer knowledge between differently scaled versions of the same physical problem.   
 
 ## Analyzing the number of independent variables 
-According to [Buckingham's Π theorem](https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem), a problem defined by `n` variables with corresponding units can be transformed into an equation with `n − m` dimensionless quantities, where `m` represents the number of independent base units used. 
+According to [the Buckingham Π theorem](https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem), a problem defined by `n` variables with corresponding units can be transformed into an equation with `n − m` dimensionless quantities, where `m` represents the number of independent base units used. 
 
 Translated to the exemplary submarine similitude problem stated above with `n = 5` variables, Dimensionless.jl can be used to calculate that there are `m = 3` independent base units in the present case:
 ```julia
