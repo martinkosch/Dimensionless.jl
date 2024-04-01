@@ -27,10 +27,10 @@ DimBasis{...}
 ```
 This basis can now be used to coherently tranform any variable within the spanned space of this basis to a dimensionless value and back to a dimensional value again:  
 ```julia
-julia> v_dimless = dimensionless(10u"m/s", basis)
-3.6866750907288726
+julia> p_dimless = dimensionless(1u"bar", basis)
+382.26299694189595
 
-julia> t_dimful = dimensionful(v_dimless, u"m/s", basis)
-10.0 m s^-1
+julia> p_dimful = dimensionful(p_dimless, u"Pa", basis)
+1.0 bar
 ```
 This procedure enables reducing the number of simulations or experiments as well as streamlining problem formulations. A full [examplary use case](https://martinkosch.github.io/Dimensionless.jl/dev/example/) can be found in the documentation. 
