@@ -1,5 +1,5 @@
 # Introduction
-This package provides tools for dimensional analysis and similitude problems. Dimensionless.jl uses units and dimensions from [Unitful.jl](https://github.com/PainterQubits/Unitful.jl).
+Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems based on [the Buckingham Π theorem](https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem).
 
 ## Installation
 Install the package using Julia's package manager:

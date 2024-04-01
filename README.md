@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://martinkosch.github.io/Dimensionless.jl/dev)
 
 # Dimensionless.jl
-Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems based on [Buckingham's Π theorem](https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem).
+Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems based on [the Buckingham Π theorem](https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem).
 
 ## Installation
 Install the package using Julia's package manager:
