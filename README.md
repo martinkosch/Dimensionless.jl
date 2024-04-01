@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://martinkosch.github.io/Dimensionless.jl/dev)
 
 # Dimensionless.jl
-Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems. 
+Dimensionless is a package built on top of [Unitful.jl](https://github.com/PainterQubits/Unitful.jl). It contains tools to conduct dimensional analysis and solve similitude problems based on [Buckingham's Π theorem](https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem).
 
 ## Installation
 Install the package using Julia's package manager:
@@ -25,7 +25,7 @@ julia> using Dimensionless, Unitful
 julia> basis = DimBasis("m"=>15u"kg", "L"=>75u"cm", "g"=>9.81u"m/s^2")
 DimBasis{...}
 ```
-This basis can now be used in a coherent fashion to tranform any variable within the spanned space of this basis to a dimensionless value and back to a dimensional value again:  
+This basis can now be used to coherently tranform any variable within the spanned space of this basis to a dimensionless value and back to a dimensional value again:  
 ```julia
 julia> v_dimless = dimensionless(10u"m/s", basis)
 3.6866750907288726
@@ -33,5 +33,4 @@ julia> v_dimless = dimensionless(10u"m/s", basis)
 julia> t_dimful = dimensionful(v_dimless, u"m/s", basis)
 10.0 m s^-1
 ```
-
-A full [examplary use case](https://martinkosch.github.io/Dimensionless.jl/dev/example/) can be found in the documentation. 
+This procedure enables reducing the number of simulations or experiments as well as streamlining problem formulations. A full [examplary use case](https://martinkosch.github.io/Dimensionless.jl/dev/example/) can be found in the documentation. 
