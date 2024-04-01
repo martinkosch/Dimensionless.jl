@@ -18,6 +18,7 @@ julia> using Dimensionless, Unitful
 
 ## Usage
 The main functionality of this package is to find and make use of bases made of problem-specific variables and their units. Such bases can then be used to transform additional variables that describe a physical problem to corresponding dimensionless values and back to a dimensional form.
+
 For example, if a problem is, among other variables, characterized by a mass ``m = 15 kg``, a length ``L = 75 cm``, and the gravitational constant ``g = 9.81 m/s^2``, a corresponding basis for the problem can be calculated:
 ```julia
 julia> using Dimensionless, Unitful
