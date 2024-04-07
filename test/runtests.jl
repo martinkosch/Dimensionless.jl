@@ -1,5 +1,8 @@
 using Dimensionless, Unitful
 using Test
+using Aqua
+
+Aqua.test_all(Dimensionless; ambiguities=false)
 
 @testset "DimBasis construction" begin
     # Check invalid basis construction exceptions
