@@ -69,7 +69,7 @@ function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Va
         for dimension in typeof(dims).parameters[1]
             basis_dim_ind = findfirst(x -> isa(dimension, x), basis_dims)
             if isnothing(basis_dim_ind) 
-                error("$(typeof(dimension)) is no basis dimension!")
+                error("$(typeof(dimension)) is no basis dimension.")
             end
             dim_mat[basis_dim_ind,dimension_ind] = dimension.power
         end
@@ -89,15 +89,15 @@ Throw errors if there are to few basis vectors or if the matrix does not have fu
 function check_basis(dim_mat)
     if size(dim_mat, 2) < size(dim_mat, 1)
         plr_sgl = (size(dim_mat, 2) == 1) ? "vector" : "vectors"
-        error("Invalid basis! There are $(size(dim_mat, 1)) dimensions but only $(size(dim_mat, 2)) basis $(plr_sgl).")
+        error("Invalid basis: There are $(size(dim_mat, 1)) dimensions but only $(size(dim_mat, 2)) basis $(plr_sgl).")
     end
 
     mat_rank = LinearAlgebra.rank(dim_mat)
     if mat_rank < size(dim_mat, 2)
         if mat_rank == 1
-            error("Invalid basis! There are $(size(dim_mat, 2)) basis vectors that are all linear dependent.")
+            error("Invalid basis: There are $(size(dim_mat, 2)) basis vectors that are all linearly dependent.")
         else
-            error("Invalid basis! There are $(size(dim_mat, 2)) basis vectors of which only $(mat_rank) are linear independent.")
+            error("Invalid basis: There are $(size(dim_mat, 2)) basis vectors of which only $(mat_rank) are linearly independent.")
         end
     end
     nothing
