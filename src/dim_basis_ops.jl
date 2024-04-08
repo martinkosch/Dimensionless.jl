@@ -26,7 +26,7 @@ num_of_dimless(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
     num_of_dimless([var.second for var in all_vars]...)
 
 """
-fac_dimful(unit, basis)
+    fac_dimful(unit, basis)
 
 Return the scalar, dimensionless factor that a dimensionless value has to be multiplied with in order to translate it into the given `unit` in the specified `basis`. 
 """
