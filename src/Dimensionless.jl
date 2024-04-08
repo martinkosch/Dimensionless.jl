@@ -1,10 +1,19 @@
 module Dimensionless
 
-using Unitful, LinearAlgebra
+using Unitful
+using LinearAlgebra
 
-export DimBasis, dim_matrix
-export number_of_dimensions, number_of_dimensionless, dimensionless, dimensionful, change_basis
-export print_dimensionless
+export DimBasis
+export dim_matrix
+
+export num_of_dims
+export num_of_dimless
+export fac_dimful
+export dimless
+export dimful
+export change_basis
+
+export print_dimless
 
 include("dim_basis.jl")
 include("dim_basis_ops.jl")

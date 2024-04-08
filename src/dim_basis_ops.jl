@@ -1,49 +1,59 @@
 """
-    number_of_dimensions(all_vars...)
+    num_of_dims(all_vars...)
 
 Return the number of unique dimensions for the given variables `all_vars`.
 """
-function number_of_dimensions(all_vars::Vararg{Unitful.Dimensions})
+function num_of_dims(all_vars::Vararg{Unitful.Dimensions})
     return length(unique_dims(all_vars...))
 end
 
-number_of_dimensions(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
-number_of_dimensions([var.second for var in all_vars]...)
+num_of_dims(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
+    num_of_dims([var.second for var in all_vars]...)
 
-number_of_dimensions(all_vars::Vararg{QuantityOrUnits}) =
-number_of_dimensions(dimension.(all_vars)...)
+num_of_dims(all_vars::Vararg{QuantityOrUnits}) =
+    num_of_dims(dimension.(all_vars)...)
 
 """
-    number_of_dimensionless(all_vars...)
+    num_of_dimless(all_vars...)
 
 Return the number of dimensionless numbers that can be constructed for a problem characterized by the variables `all_vars`.
 """
-function number_of_dimensionless(all_vars::Vararg{QuantityOrUnitlike})
-    return length(all_vars) - number_of_dimensions(all_vars...)
+function num_of_dimless(all_vars::Vararg{QuantityOrUnitlike})
+    return length(all_vars) - num_of_dims(all_vars...)
 end
 
-number_of_dimensionless(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
-number_of_dimensionless([var.second for var in all_vars]...)
+num_of_dimless(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
+    num_of_dimless([var.second for var in all_vars]...)
 
 """
-    dimensionless(quantity, basis)
+fac_dimful(unit, basis)
+
+Return the scalar, dimensionless factor that a dimensionless value has to be multiplied with in order to translate it into the given `unit` in the specified `basis`. 
+"""
+function fac_dimful(unit::Unitful.Units, basis::QuantityDimBasis)
+    dim_vec = dim_matrix(basis.basis_dims, dimension(unit))
+    fac = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_vec))
+    return ustrip(uconvert(unit, fac))
+end
+
+"""
+    dimless(quantity, basis)
 
 Make a `quantity` dimensionless using a dimensional `basis`.
 """
-function dimensionless(quantity::Unitful.AbstractQuantity, basis::QuantityDimBasis)
-    dim_mat = dim_matrix(basis.basis_dims, quantity)
-    basis_facs = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_mat))
-    return ustrip(uconvert(Unitful.NoUnits, quantity / basis_facs))
+function dimless(quantity::Unitful.AbstractQuantity, basis::QuantityDimBasis)
+    fac = fac_dimful(unit(quantity), basis)
+    return ustrip(quantity) / fac
 end
 
 """
-    dimensionful(value, unit, basis)
+    dimful(value, unit, basis)
 
 Restore the `unit`s of a dimensionless `value` using a dimensional `basis`.
 """
-function dimensionful(value::Number, unit::Unitful.Units, basis::QuantityDimBasis)
-    dim_vec = dim_matrix(basis.basis_dims, dimension(unit))
-    return uconvert(unit, value * prod(basis.basis_vectors .^ (basis.dim_mat \ dim_vec)))
+function dimful(value, unit::Unitful.Units, basis::QuantityDimBasis)
+    fac = fac_dimful(unit, basis)
+    return value * fac * unit
 end
 
 """
@@ -66,7 +76,7 @@ end
 Transform the specified quantity or unit `var` from a current `basis` to a `new_basis`.
 """
 change_basis(var::Unitful.AbstractQuantity, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
-var * current_to_new_fac(dimension(var), basis, new_basis)
+    var * current_to_new_fac(dimension(var), basis, new_basis)
 
 change_basis(var::Unitful.Units, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
-current_to_new_fac(dimension(var), basis, new_basis)
+    current_to_new_fac(dimension(var), basis, new_basis)
