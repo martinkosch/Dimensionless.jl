@@ -27,13 +27,13 @@ According to [the Buckingham Π theorem](https://en.wikipedia.org/wiki/Buckingha
 
 Translated to the exemplary submarine similitude problem stated above with `n = 5` variables, Dimensionless.jl can be used to calculate that there are `m = 3` independent base units in the present case:
 ```julia
-julia> m = number_of_dimensions(u"m", u"m/s", u"kg/m^3", u"Pa*s", u"N")
+julia> m = num_of_dims(u"m", u"m/s", u"kg/m^3", u"Pa*s", u"N")
 3
 ```
 
 Correspondingly, there are `n - m = 5 - 3 = 2` dimensionless variables, or Pi terms, that should be selected to effectively capture the essence of the physical phenomena under investigation: 
 ```julia
-julia> number_of_dimensionless(u"m", u"m/s", u"kg/m^3", u"Pa*s", u"N")
+julia> num_of_dimless(u"m", u"m/s", u"kg/m^3", u"Pa*s", u"N")
 2
 ```
 
@@ -48,13 +48,13 @@ In this case, a suitable basis could be found by selecting the `m = 3` variables
 
 For example, any velocity `V` can be made dimensionless by multiplying it with a factor `L ρ / μ` as can be determined using Dimensionless.jl:  
 ```julia
-julia> print_dimensionless("V"=>u"m/s", basis)
+julia> print_dimless("V"=>u"m/s", basis)
 V L ρ μ^-1
 ```
 
 The same is true for every force `F`:
 ```julia
-julia> print_dimensionless("F"=>u"N", basis)
+julia> print_dimless("F"=>u"N", basis)
 F ρ μ^-2
 ```
 Note that the first found number is the Reynolds number ``\mathit{Re}`` and the second number can be identified as the product of the drag coefficient ``c_\mathrm{d}`` and ``\mathit{Re}^2``. In Dimensionless.jl, these numbers are mostly used under the hood to transform between formulations with and without dimensions.  
@@ -94,14 +94,14 @@ julia> P_app_fac = change_basis(109.58u"W", model_basis, app_basis)
 Of course, at a velocity of ``V = 109.6 \mathrm{m}/\mathrm{s}`` during the scaled experiment, the obtained force can easily be higher than `1 N`. Generally, the mechanical power of the real submarine scales proportional to the measured force with a factor ``17.156144908079394 \mathrm{W}/\mathrm{N}``. 
 
 ## Removing and restoring dimensions
-Arguably the two most important functions of this package are `dimensionless()` and `dimensionful()`. For a given dimensional basis, these two functions can be used to convert single or multiple variables from a formulation with dimensions to a corresponding dimensionless formulation and reverse: 
+Arguably the two most important functions of this package are `dimless()` and `dimful()`. For a given dimensional basis, these two functions can be used to convert single or multiple variables from a formulation with dimensions to a corresponding dimensionless formulation and reverse: 
 ```julia
 julia> dim_vars = (1u"cm/g", 1u"mm/s")
 (1 cm g^-1, 1 mm s^-1)
 
-julia> dimless_vars = dimensionless.(dim_vars, model_basis)
+julia> dimless_vars = dimless.(dim_vars, model_basis)
 (6.2375, 24.95)
 
-julia> dimensionful.(dimless_vars, (u"cm/g", u"mm/s"), model_basis)
+julia> dimful.(dimless_vars, (u"cm/g", u"mm/s"), model_basis)
 (1.0 cm g^-1, 1.0 mm s^-1)
 ```

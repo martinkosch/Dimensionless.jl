@@ -10,19 +10,23 @@ dim_matrix
 ```
 
 ```@docs
-number_of_dimensions
+num_of_dims
 ```
 
 ```@docs
-number_of_dimensionless
+num_of_dimless
 ```
 
 ```@docs
-dimensionless
+fac_dimful
 ```
 
 ```@docs
-dimensionful
+dimless
+```
+
+```@docs
+dimful
 ```
 
 ```@docs
@@ -30,5 +34,5 @@ change_basis
 ```
 
 ```@docs
-print_dimensionless
+print_dimless
 ```

@@ -1,6 +1,6 @@
 # Helper Unions
-QuantityOrUnits = Union{Unitful.AbstractQuantity, Unitful.Units}
-QuantityOrUnitlike = Union{Unitful.AbstractQuantity, Unitful.Unitlike}
+QuantityOrUnits = Union{Unitful.AbstractQuantity,Unitful.Units}
+QuantityOrUnitlike = Union{Unitful.AbstractQuantity,Unitful.Unitlike}
 
 """
     DimBasis(basis_vectors...) -> DimBasis
@@ -14,9 +14,9 @@ struct DimBasis{T,N}
     basis_dims
     dim_mat
 
-    function DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where
-        T<:AbstractVector{<:QuantityOrUnitlike} where
-        N<:Union{Nothing,AbstractVector{<:AbstractString}}
+    function DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where {
+        T<:AbstractVector{<:QuantityOrUnitlike}} where {
+        N<:Union{Nothing,AbstractVector{<:AbstractString}}}
         basis_dims = unique_dims(basis_vectors...)
         dim_mat = dim_matrix(basis_dims, basis_vectors...)
         check_basis(dim_mat)
@@ -25,7 +25,7 @@ struct DimBasis{T,N}
 end
 
 DimBasis(basis_vectors::Vararg{QuantityOrUnitlike}) =
-DimBasis([basis_vectors...])
+    DimBasis([basis_vectors...])
 
 function DimBasis(basis_vectors::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}})
     to_quantity = any([isa(bv.second, Unitful.AbstractQuantity) for bv in basis_vectors])
@@ -40,7 +40,7 @@ Base.Broadcast.broadcastable(basis::DimBasis) = Ref(basis)
 # Helper Types
 QuantityDimBasis = DimBasis{<:AbstractVector{<:Unitful.AbstractQuantity}}
 
-NamedDimBase = DimBasis{T,<:AbstractVector{<:AbstractString}} where T
+NamedDimBase = DimBasis{T,<:AbstractVector{<:AbstractString}} where {T}
 
 """
     unique_dims(all_values...)
@@ -65,20 +65,20 @@ Return the dimensional matrix for a set of basis dimensions `basis_dims` and `al
 """
 function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{Unitful.Dimensions})
     dim_mat = zeros(Rational, length(basis_dims), length(all_values))
-    for (dimension_ind,dims) in enumerate(all_values)
+    for (dimension_ind, dims) in enumerate(all_values)
         for dimension in typeof(dims).parameters[1]
             basis_dim_ind = findfirst(x -> isa(dimension, x), basis_dims)
-            if isnothing(basis_dim_ind) 
+            if isnothing(basis_dim_ind)
                 error("$(typeof(dimension)) is no basis dimension.")
             end
-            dim_mat[basis_dim_ind,dimension_ind] = dimension.power
+            dim_mat[basis_dim_ind, dimension_ind] = dimension.power
         end
     end
     return dim_mat
 end
 
 dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{QuantityOrUnits}) =
-dim_matrix(basis_dims, dimension.(all_values)...)
+    dim_matrix(basis_dims, dimension.(all_values)...)
 
 """
     check_basis(dim_mat)

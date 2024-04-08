@@ -1,6 +1,8 @@
-using Dimensionless, Unitful
 using Test
 using Aqua
+
+using Dimensionless
+using Unitful
 
 Aqua.test_all(Dimensionless; ambiguities=false)
 
@@ -29,8 +31,8 @@ Aqua.test_all(Dimensionless; ambiguities=false)
         # Construct bases
         input_vectors = broadcast(broadcast_fcn, basis_vectors_template)
         basis = isnamed ?
-        DimBasis([Pair(basis_vector_names_template[i], input_vectors[i]) for i in eachindex(basis_vectors_template)]...) :
-        DimBasis(input_vectors...)
+                DimBasis([Pair(basis_vector_names_template[i], input_vectors[i]) for i in eachindex(basis_vectors_template)]...) :
+                DimBasis(input_vectors...)
 
         # Check validity
         isnamed && @test basis.basis_vector_names == basis_vector_names_template
@@ -44,58 +46,58 @@ end
     # Test change of basis and broadcast
     dimless_dimful_basis = DimBasis(1u"mA", 2u"K", 3u"Pa*s", 4u"h", 5u"kg")
     vars = [0u"A/m^2", 1u"nm", 2u"K"]
-    dim_less = dimensionless.(vars, dimless_dimful_basis)
-    @test dimensionful.(dim_less, [u"A/m^2", u"nm", u"K"], dimless_dimful_basis) == vars
+    dim_less = dimless.(vars, dimless_dimful_basis)
+    @test dimful.(dim_less, [u"A/m^2", u"nm", u"K"], dimless_dimful_basis) == vars
 
     # Test counting of dimensions and dimensionless variables for named basis
-    quantities_named = ["a"=>100.0u"m", "b"=>100u"kg", "c"=>0u"s"]
+    quantities_named = ["a" => 100.0u"m", "b" => 100u"kg", "c" => 0u"s"]
     units_named = [Pair(var.first, unit(var.second)) for var in quantities_named]
     dims_named = [Pair(var.first, dimension(var.second)) for var in quantities_named]
-    @test number_of_dimensions(quantities_named...) == 3
-    @test number_of_dimensions(units_named...) == 3
-    @test number_of_dimensions(dims_named...) == 3
-    @test number_of_dimensionless(quantities_named...) == 0
-    @test number_of_dimensionless(units_named...) == 0
-    @test number_of_dimensionless(dims_named...) == 0
+    @test num_of_dims(quantities_named...) == 3
+    @test num_of_dims(units_named...) == 3
+    @test num_of_dims(dims_named...) == 3
+    @test num_of_dimless(quantities_named...) == 0
+    @test num_of_dimless(units_named...) == 0
+    @test num_of_dimless(dims_named...) == 0
 
     # Test counting of dimensions and dimensionless variables for unnamed basis
     quantities_unnamed = [var.second for var in quantities_named]
     units_unnamed = [var.second for var in units_named]
     dims_unnamed = [var.second for var in dims_named]
-    @test number_of_dimensions(quantities_unnamed...) == 3
-    @test number_of_dimensions(units_unnamed...) == 3
-    @test number_of_dimensions(dims_unnamed...) == 3
-    @test number_of_dimensionless(quantities_unnamed...) == 0
-    @test number_of_dimensionless(units_unnamed...) == 0
-    @test number_of_dimensionless(dims_unnamed...) == 0
+    @test num_of_dims(quantities_unnamed...) == 3
+    @test num_of_dims(units_unnamed...) == 3
+    @test num_of_dims(dims_unnamed...) == 3
+    @test num_of_dimless(quantities_unnamed...) == 0
+    @test num_of_dimless(units_unnamed...) == 0
+    @test num_of_dimless(dims_unnamed...) == 0
 
     # change_basis(quantity/unit, old_b, new_b) for named and unnamed quantity bases
-    basis_named = DimBasis("x"=>1u"m", "y"=>1u"kg", "z"=>1u"s")
-    new_basis_named = DimBasis("x_new"=>2u"m", "y_new"=>2u"kg", "z_new"=>2u"s")
-    @test Dimensionless.current_to_new_fac(Unitful.𝐋*Unitful.𝐓*Unitful.𝐌, basis_named, new_basis_named) == 2^3
+    basis_named = DimBasis("x" => 1u"m", "y" => 1u"kg", "z" => 1u"s")
+    new_basis_named = DimBasis("x_new" => 2u"m", "y_new" => 2u"kg", "z_new" => 2u"s")
+    @test Dimensionless.current_to_new_fac(Unitful.𝐋 * Unitful.𝐓 * Unitful.𝐌, basis_named, new_basis_named) == 2^3
     @test change_basis(100u"cm*kg*s", basis_named, new_basis_named) == 8u"m*kg*s"
     @test change_basis(u"m*kg*s", basis_named, new_basis_named) == 8
 
     basis_unnamed = DimBasis(1u"m", 1u"kg", 1u"s")
     new_basis_unnamed = DimBasis(2u"m", 2u"kg", 2u"s")
-    @test Dimensionless.current_to_new_fac(Unitful.𝐋*Unitful.𝐓*Unitful.𝐌, basis_unnamed, new_basis_unnamed) == 2^3
+    @test Dimensionless.current_to_new_fac(Unitful.𝐋 * Unitful.𝐓 * Unitful.𝐌, basis_unnamed, new_basis_unnamed) == 2^3
     @test change_basis(100u"cm*kg*s", basis_unnamed, new_basis_unnamed) == 8u"m*kg*s"
     @test change_basis(u"m*kg*s", basis_unnamed, new_basis_unnamed) == 8
 end
 
 @testset "Utils" begin
-    var = "L"=>0.2u"m"
-    quantities_named = ["ρ"=>1400.0u"kg/m^3", "v"=>0.5u"m/s", "η"=>(10^4)u"Pa*s"]
+    var = "L" => 0.2u"m"
+    quantities_named = ["ρ" => 1400.0u"kg/m^3", "v" => 0.5u"m/s", "η" => (10^4)u"Pa*s"]
     units_named = [Pair(var.first, unit(var.second)) for var in quantities_named]
     dims_named = [Pair(var.first, dimension(var.second)) for var in quantities_named]
     res_desired = "L ρ v η^-1"
     res_buf = IOBuffer()
 
     # Test dimensionless string for named basis
-    print_dimensionless(res_buf, var, DimBasis(quantities_named...))
+    print_dimless(res_buf, var, DimBasis(quantities_named...))
     @test String(take!(res_buf)) == res_desired
-    print_dimensionless(res_buf, var, DimBasis(units_named...))
+    print_dimless(res_buf, var, DimBasis(units_named...))
     @test String(take!(res_buf)) == res_desired
-    print_dimensionless(res_buf, var, DimBasis(dims_named...))
+    print_dimless(res_buf, var, DimBasis(dims_named...))
     @test String(take!(res_buf)) == res_desired
 end
