@@ -31,7 +31,7 @@ This basis can now be used to coherently tranform any variable within the spanne
 julia> p_dimless = dimless(0.2u"bar", basis)
 76.45259938837918
 
-julia> p_dimful = dimful(p_dimless, u"Pa", basis)
+julia> p_dimful = dimful(p_dimless, u"bar", basis)
 0.2 bar
 ```
 This procedure enables reducing the number of simulations or experiments as well as streamlining problem formulations. A full [examplary use case](https://martinkosch.github.io/Dimensionless.jl/dev/example/) can be found in the documentation. 
