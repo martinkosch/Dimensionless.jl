@@ -1,5 +1,35 @@
-# Example
-The following example is taken from the [Similitude Wikipedia article](https://en.wikipedia.org/wiki/Similitude_(model)):
+# Finding a dimensional basis
+All calculations in Dimensionless.jl revolve around the concept of dimensional bases. Such bases are constructed as a set of linearly independent dimensional variables spanning the dimensional space of the studied problem. Constructing such a dimensional basis is achieved by creating an instance of type `DimBasis`. For example, this is a valid basis:
+```julia
+julia> basis = DimBasis(u"m", u"kg/m^3", u"Pa*s") 
+DimBasis{...}
+```
+Every variable with a unit that lies inside the space spanned by this basis can be expressed as a linear combination of the basis variables. At the same time, each dimensioned variable can be transformed into a dimensionless representation using the basis.
+
+# Removing and restoring dimensions
+Arguably the two most important functions of this package are `dimless` and `dimful`. For a given dimensional basis, these two functions can be used to convert a single variables or multiple variables at once from a formulation with dimensions to a corresponding dimensionless formulation and vice versa: 
+```julia
+julia> dim_vars = (1u"cm/g", 1u"mm/s")
+(1 cm g^-1, 1 mm s^-1)
+
+julia> dimless_vars = dimless.(dim_vars, model_basis)
+(6.2375, 24.95)
+
+julia> dimful.(dimless_vars, (u"cm/g", u"mm/s"), model_basis)
+(1.0 cm g^-1, 1.0 mm s^-1)
+```
+
+Such a conversion is particularly helpful to obtain easily generalizable results from complex calculations, e.g. large FEM problems. In addition, the conversion to dimensionless variables helps to normalize a problem formulations to avoid numerical instabilities. In addition to the functions mentioned above, there is also the function `fac_dimful`, which only returns the conversion factor from a dimensionless number to dimensionful representation in the given dimensional basis. For the first variable of the example above, this looks like this:  
+```julia
+julia> fac_dimful(u"cm/g", model_basis)
+0.16032064128256512
+
+julia> fac_dimful(u"cm/g", model_basis) * dimless_vars[1]
+0.1
+```
+
+# Similitude example
+A closely related use case is the systematic formulation of similitude problems. The following example is taken from the [Similitude Wikipedia article](https://en.wikipedia.org/wiki/Similitude_(model)):
 
 >Consider a submarine modeled at 1/40th scale. The application operates in sea water at 0.5 °C, moving at 5 m/s. The model will be tested in fresh water at 20 °C. 
 >
@@ -39,14 +69,12 @@ julia> num_of_dimless(u"m", u"m/s", u"kg/m^3", u"Pa*s", u"N")
 
 ## Finding a dimensional basis
 The first step to set up the similitude problem is to find a suitable set of `m` independent variables that serve as a dimensional basis. These variables must span the dimensional space of the studied problem. 
-In Dimensionless.jl, constructing such a dimensional basis is achieved by creating an instance of type `DimBasis`. While creating such a basis using the `DimBasis` function, it is helpful to name the used variables to allow pretty printing of the results later on:
+As explained above, constructing such a dimensional basis is achieved by creating an instance of type `DimBasis`. While creating such a basis using the `DimBasis` function, it is helpful to name the used variables to allow pretty printing of the results later on:
 ```julia
 julia> basis = DimBasis("L"=>u"m", "ρ"=>u"kg/m^3", "μ"=>u"Pa*s") 
 DimBasis{...}
 ```
-In this case, a suitable basis could be found by selecting the `m = 3` variables `L`, `ρ`, and `μ` as basis variables. Using such a basis, every variable with a unit that lies inside the space spanned by this basis can be expressed as a linear combination of the basis variables. At the same time, each dimensioned variable can be transformed into a dimensionless representation using these basic variables. 
-
-For example, any velocity `V` can be made dimensionless by multiplying it with a factor `L ρ / μ` as can be determined using Dimensionless.jl:  
+In this case, a suitable basis could be found by selecting the `m = 3` variables `L`, `ρ`, and `μ` as basis variables. Every variable with a unit that lies inside the space spanned by this basis can be expressed as a corresponding dimensionless variable. For example, any velocity `V` can be made dimensionless by multiplying it with a factor `L ρ / μ` as can be determined using Dimensionless.jl:  
 ```julia
 julia> print_dimless("V"=>u"m/s", basis)
 V L ρ μ^-1
@@ -57,7 +85,7 @@ The same is true for every force `F`:
 julia> print_dimless("F"=>u"N", basis)
 F ρ μ^-2
 ```
-Note that the first found number is the Reynolds number ``\mathit{Re}`` and the second number can be identified as the product of the drag coefficient ``c_\mathrm{d}`` and ``\mathit{Re}^2``. In Dimensionless.jl, these numbers are mostly used under the hood to transform between formulations with and without dimensions.  
+Note that the first found number is the Reynolds number ``\mathit{Re}`` and the second number can be identified as the product of the drag coefficient ``c_\mathrm{d}`` and ``\mathit{Re}^2``. In Dimensionless.jl, these numbers are mostly used under the hood to transform between formulations with and without dimensions. The actual conversions for single or multiple variables can be achieved by using the functions explained above: `dimless` and `dimful`.
 
 ## Calculating the missing entries in the table
 Let's use the values in the data table to construct two bases describing the submarine model and the submarine in the real application, respectively:
@@ -92,16 +120,3 @@ julia> P_app_fac = change_basis(109.58u"W", model_basis, app_basis)
 17.156144908079394 W
 ```
 Of course, at a velocity of ``V = 109.6 \mathrm{m}/\mathrm{s}`` during the scaled experiment, the obtained force can easily be higher than `1 N`. Generally, the mechanical power of the real submarine scales proportional to the measured force with a factor ``17.156144908079394 \mathrm{W}/\mathrm{N}``. 
-
-## Removing and restoring dimensions
-Arguably the two most important functions of this package are `dimless()` and `dimful()`. For a given dimensional basis, these two functions can be used to convert single or multiple variables from a formulation with dimensions to a corresponding dimensionless formulation and reverse: 
-```julia
-julia> dim_vars = (1u"cm/g", 1u"mm/s")
-(1 cm g^-1, 1 mm s^-1)
-
-julia> dimless_vars = dimless.(dim_vars, model_basis)
-(6.2375, 24.95)
-
-julia> dimful.(dimless_vars, (u"cm/g", u"mm/s"), model_basis)
-(1.0 cm g^-1, 1.0 mm s^-1)
-```
