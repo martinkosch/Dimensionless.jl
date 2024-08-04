@@ -7,7 +7,7 @@ DimBasis{...}
 Every variable with a unit that lies inside the space spanned by this basis can be expressed as a linear combination of the basis variables. At the same time, each dimensioned variable can be transformed into a dimensionless representation using the basis.
 
 # Removing and restoring dimensions
-Arguably the two most important functions of this package are `dimless` and `dimful`. For a given dimensional basis, these two functions can be used to convert a single variables or multiple variables at once from a formulation with dimensions to a corresponding dimensionless formulation and vice versa: 
+Arguably the two most important functions of this package are `dimless` and `dimful`. For a given dimensional basis, these two functions can be used to convert a single variable or multiple variables at once from a formulation with dimensions to a corresponding dimensionless formulation and vice versa: 
 ```julia
 julia> dim_vars = (1u"cm/g", 1u"mm/s")
 (1 cm g^-1, 1 mm s^-1)
@@ -19,7 +19,9 @@ julia> dimful.(dimless_vars, (u"cm/g", u"mm/s"), model_basis)
 (1.0 cm g^-1, 1.0 mm s^-1)
 ```
 
-Such a conversion is particularly helpful to obtain easily generalizable results from complex calculations, e.g. large FEM problems. In addition, the conversion to dimensionless variables helps to normalize a problem formulations to avoid numerical instabilities. In addition to the functions mentioned above, there is also the function `fac_dimful`, which only returns the conversion factor from a dimensionless number to dimensionful representation in the given dimensional basis. For the first variable of the example above, this looks like this:  
+Such a conversion is particularly helpful to obtain easily generalizable results from complex calculations, e.g. large FEM simulations. In addition, the conversion to dimensionless variables helps to bring the numerical values of a problem formulation to a common order of magnitude. This can help to prevent numerical issues. 
+
+In addition to the functions mentioned above, there is also the function `fac_dimful`, which only returns the conversion factor from a dimensionless number to dimensionful representation in the given dimensional basis. For the first variable of the example above, this looks like this:  
 ```julia
 julia> fac_dimful(u"cm/g", model_basis)
 0.16032064128256512
