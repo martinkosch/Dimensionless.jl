@@ -30,7 +30,7 @@ num_of_dimless(all_vars::Vararg{Pair{<:AbstractString,<:QuantityOrUnitlike}}) =
 
 Return the scalar, dimensionless factor that a dimensionless value has to be multiplied with in order to translate it into the given `unit` in the specified `basis`. 
 """
-function fac_dimful(unit::Unitful.Units, basis::QuantityDimBasis)
+function fac_dimful(unit::Unitful.Units, basis::DimBasis)
     dim_vec = dim_matrix(basis.basis_dims, dimension(unit))
     fac = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_vec))
     return ustrip(uconvert(unit, fac))
@@ -41,7 +41,7 @@ end
 
 Make a `quantity` dimensionless using a dimensional `basis`.
 """
-function dimless(quantity::Unitful.AbstractQuantity, basis::QuantityDimBasis)
+function dimless(quantity::Unitful.AbstractQuantity, basis::DimBasis)
     fac = fac_dimful(unit(quantity), basis)
     return ustrip(quantity) / fac
 end
@@ -51,7 +51,7 @@ end
 
 Restore the `unit`s of a dimensionless `value` using a dimensional `basis`.
 """
-function dimful(value, unit::Unitful.Units, basis::QuantityDimBasis)
+function dimful(value, unit::Unitful.Units, basis::DimBasis)
     fac = fac_dimful(unit, basis)
     return value * fac * unit
 end
@@ -61,7 +61,7 @@ end
 
 Return the factor that is needed to transform specified dimensions `dims` from a current `basis` to a `new_basis`.
 """
-function current_to_new_fac(dims::Unitful.Dimensions, basis::QuantityDimBasis, new_basis::QuantityDimBasis)
+function current_to_new_fac(dims::Unitful.Dimensions, basis::DimBasis, new_basis::DimBasis)
     dim_mat = dim_matrix(basis.basis_dims, dims)
     new_dim_mat = dim_matrix(new_basis.basis_dims, dims)
     basis_fac = prod(basis.basis_vectors .^ (basis.dim_mat \ dim_mat))
@@ -75,8 +75,8 @@ end
 
 Transform the specified quantity or unit `var` from a current `basis` to a `new_basis`.
 """
-change_basis(var::Unitful.AbstractQuantity, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
+change_basis(var::Unitful.AbstractQuantity, basis::DimBasis, new_basis::DimBasis) =
     var * current_to_new_fac(dimension(var), basis, new_basis)
 
-change_basis(var::Unitful.Units, basis::QuantityDimBasis, new_basis::QuantityDimBasis) =
+change_basis(var::Unitful.Units, basis::DimBasis, new_basis::DimBasis) =
     current_to_new_fac(dimension(var), basis, new_basis)

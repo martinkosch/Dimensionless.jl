@@ -1,6 +1,6 @@
 # Helper Unions
-QuantityOrUnits = Union{Unitful.AbstractQuantity,Unitful.Units}
-QuantityOrUnitlike = Union{Unitful.AbstractQuantity,Unitful.Unitlike}
+const QuantityOrUnits = Union{Unitful.AbstractQuantity,Unitful.Units}
+const QuantityOrUnitlike = Union{Unitful.AbstractQuantity,Unitful.Unitlike}
 
 """
     DimBasis(basis_vectors...) -> DimBasis
@@ -8,19 +8,20 @@ QuantityOrUnitlike = Union{Unitful.AbstractQuantity,Unitful.Unitlike}
 Create a dimensional basis for a number of `basis_vectors` (quantities, units or dimensions).
 A string identifier can optionally be added to each basis vector. 
 """
-struct DimBasis{T,N}
+struct DimBasis{T,N,BD,DM}
     basis_vectors::T
     basis_vector_names::N
-    basis_dims
-    dim_mat
+    basis_dims::BD
+    dim_mat::DM
 
     function DimBasis(basis_vectors::T, basis_vector_names::N=nothing) where {
-        T<:AbstractVector{<:QuantityOrUnitlike}} where {
-        N<:Union{Nothing,AbstractVector{<:AbstractString}}}
+        T<:AbstractVector,N<:Union{Nothing,<:AbstractVector{<:AbstractString}}}
         basis_dims = unique_dims(basis_vectors...)
         dim_mat = dim_matrix(basis_dims, basis_vectors...)
         check_basis(dim_mat)
-        return new{T,N}(basis_vectors, basis_vector_names, basis_dims, dim_mat)
+        return new{T,N,typeof(basis_dims),typeof(dim_mat)}(
+            basis_vectors, basis_vector_names, basis_dims, dim_mat,
+        )
     end
 end
 
@@ -37,10 +38,7 @@ end
 # Do not broadcast DimBasis
 Base.Broadcast.broadcastable(basis::DimBasis) = Ref(basis)
 
-# Helper Types
-QuantityDimBasis = DimBasis{<:AbstractVector{<:Unitful.AbstractQuantity}}
-
-NamedDimBase = DimBasis{T,<:AbstractVector{<:AbstractString}} where {T}
+const NamedDimBase = DimBasis{T,<:AbstractVector{<:AbstractString}} where {T}
 
 """
     unique_dims(all_values...)
@@ -52,7 +50,8 @@ function unique_dims(all_values::Vararg{Unitful.Dimensions})
     for dims in all_values
         union!(basis_dims, typeof.(typeof(dims).parameters[1]))
     end
-    return basis_dims
+    dtype = mapreduce(typeof, (a,b) -> Union{a,b}, basis_dims)
+    return convert(Vector{dtype}, basis_dims)
 end
 
 unique_dims(all_values::Vararg{QuantityOrUnits}) =
@@ -63,8 +62,8 @@ unique_dims(all_values::Vararg{QuantityOrUnits}) =
 
 Return the dimensional matrix for a set of basis dimensions `basis_dims` and `all_values`, a set of quantities, units or dimensions.
 """
-function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{Unitful.Dimensions})
-    dim_mat = zeros(Rational, length(basis_dims), length(all_values))
+function dim_matrix(basis_dims::AbstractArray, all_values::Vararg{Unitful.Dimensions})
+    dim_mat = zeros(Rational{Int}, length(basis_dims), length(all_values))
     for (dimension_ind, dims) in enumerate(all_values)
         for dimension in typeof(dims).parameters[1]
             basis_dim_ind = findfirst(x -> isa(dimension, x), basis_dims)
@@ -77,7 +76,7 @@ function dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Va
     return dim_mat
 end
 
-dim_matrix(basis_dims::Array{Type{<:Unitful.Dimension}}, all_values::Vararg{QuantityOrUnits}) =
+dim_matrix(basis_dims::AbstractArray, all_values::Vararg{QuantityOrUnits}) =
     dim_matrix(basis_dims, dimension.(all_values)...)
 
 """

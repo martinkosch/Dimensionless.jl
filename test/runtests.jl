@@ -49,6 +49,8 @@ end
     dim_less = dimless.(vars, dimless_dimful_basis)
     @test dimful.(dim_less, [u"A/m^2", u"nm", u"K"], dimless_dimful_basis) == vars
 
+    @test dimless(1u"A", dimless_dimful_basis) ≈ 1000
+
     # Test counting of dimensions and dimensionless variables for named basis
     quantities_named = ["a" => 100.0u"m", "b" => 100u"kg", "c" => 0u"s"]
     units_named = [Pair(var.first, unit(var.second)) for var in quantities_named]
